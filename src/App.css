@@ -55,11 +55,44 @@
   border-radius: var(--radius-full);
   transition: all var(--transition-fast);
   position: relative;
+  overflow: hidden;
+  display: inline-block;
 }
 
-.navbar__link:hover {
-  color: var(--text-primary);
-  background: var(--bg-card);
+.navbar__link-text {
+  position: relative;
+  z-index: 2;
+  transition: all var(--transition-fast);
+}
+
+.navbar__link-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  z-index: 1;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.navbar__link:hover .navbar__link-glow,
+.navbar__link:active .navbar__link-glow {
+  width: 150%;
+  height: 250%;
+  opacity: 0.2;
+}
+
+.navbar__link:hover .navbar__link-text {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(139,92,246,0.8);
+}
+
+.navbar--hidden {
+  transform: translateY(-100%);
 }
 
 .navbar__resume-btn {

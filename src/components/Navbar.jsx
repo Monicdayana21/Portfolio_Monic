@@ -2,13 +2,29 @@ import { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
+    let lastScrollY = window.scrollY;
+
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      setScrolled(currentScrollY > 50);
+
+      if (currentScrollY > lastScrollY && currentScrollY > 100 && !menuOpen) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [menuOpen]);
 
   const links = [
     { label: 'Home', href: '#home' },
@@ -20,7 +36,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`} id="navbar">
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${hidden ? 'navbar--hidden' : ''}`} id="navbar">
       <div className="container navbar__inner">
         <a href="#home" className="navbar__logo">
           <span className="navbar__logo-text">MD</span>
@@ -28,7 +44,10 @@ export default function Navbar() {
         <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
           {links.map(l => (
             <li key={l.href}>
-              <a href={l.href} className="navbar__link" onClick={() => setMenuOpen(false)}>{l.label}</a>
+              <a href={l.href} className="navbar__link" onClick={() => setMenuOpen(false)}>
+                <span className="navbar__link-text">{l.label}</span>
+                <span className="navbar__link-glow"></span>
+              </a>
             </li>
           ))}
           <li>
