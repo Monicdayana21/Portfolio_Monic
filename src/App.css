@@ -748,7 +748,7 @@
 .contact__card-description {
   font-size: 0.82rem;
   color: var(--text-secondary);
-  word-break: break-all;
+  white-space: nowrap;
 }
 
 /* ============================================
